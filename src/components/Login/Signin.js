@@ -1,19 +1,17 @@
-import React from 'react';
-
+import React, {useState} from 'react';
 import './Signin.css';
 import { useNavigate} from 'react-router-dom';
 
 
-export default function Signin() {
+export default function Signin({signIn}) {
+
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
 
     const navigate = useNavigate();
 
     const goToSignUpPage = () => {
         navigate('/signup');
-    }
-
-    const goToGamePage = () => {
-        navigate('/game');
     }
 
     return (
@@ -24,7 +22,7 @@ export default function Signin() {
                             <label htmlFor="fname">Username:</label>
                         </div>
                         <div className="col-75">
-                            <input type="text" id="username" name="firstname" placeholder="username.." />
+                            <input type="text" value={username} placeholder="username.." onChange={(e) => setUsername(e.target.value)} />
                         </div>
                     </div>
                     <div className="row">
@@ -32,11 +30,11 @@ export default function Signin() {
                             <label htmlFor="lname">Password:</label>
                         </div>
                         <div className="col-75">
-                            <input type="password" id="password" name="lastname" placeholder="password.." />
+                            <input type="password" value={password} placeholder="password.." onChange={(e) => setPassword(e.target.value)} />
                         </div>
                     </div>
                     <div className="row">
-                        <input type="submit" onClick={() => {goToGamePage()}} value="Sign In" />
+                        <input type="button" onClick={() => signIn(username, password)} value="Sign In" />
                     </div>
                     <button onClick={() => {goToSignUpPage()}} type="button" className='linkButton' > New? Register Here </button>
                 </form>

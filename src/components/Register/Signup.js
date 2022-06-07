@@ -17,7 +17,7 @@ export default function Signup({ registerUser }) {
                         <label htmlFor="fname">Username:</label>
                     </div>
                     <div className="col-75">
-                        <input type="text"  name="username" value={username} placeholder="username.." onChange={(e) => setUsername(e.target.value)} />
+                        <input type="text" value={username} placeholder="username.." onChange={(e) => setUsername(e.target.value)} />
                     </div>
                 </div>
                 <div className="row">
@@ -25,7 +25,7 @@ export default function Signup({ registerUser }) {
                         <label htmlFor="lname">Password:</label>
                     </div>
                     <div className="col-75">
-                        <input type="text"  name="password" value={password} placeholder="password.." onChange={(e) => setPassword(e.target.value)} />
+                        <input type="text" value={password} placeholder="password.." onChange={(e) => setPassword(e.target.value)} />
                     </div>
                 </div>
                 <div className="row">

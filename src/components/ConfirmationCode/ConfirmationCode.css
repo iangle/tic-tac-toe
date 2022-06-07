@@ -15,7 +15,7 @@
   }
   
   /* Style the submit button */
-  input[type=submit] {
+  input[type=button] {
     background-color: #04AA6D;
     color: white;
     padding: 12px 20px;
