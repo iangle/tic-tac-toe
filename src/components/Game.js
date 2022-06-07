@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import Board from './Board';
-//import localStorage from 'local-storage';
 
 import './gameStyles.css'
 

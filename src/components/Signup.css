@@ -1,0 +1,16 @@
+.signUpForm{
+    border-color: black;
+}
+
+.input{
+    display: block;
+    width: 100%;
+}
+
+.rootDiv{
+    width: 500px;
+}
+
+.labels{
+    color: white;
+}
