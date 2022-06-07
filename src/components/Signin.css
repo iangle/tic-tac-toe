@@ -1,5 +1,5 @@
  /* Style inputs, select elements and textareas */
- input[type=text], select, textarea{
+ input[type=text], select, textarea, input[type=password]{
     width: 100%;
     padding: 12px;
     border: 1px solid #ccc;
@@ -15,7 +15,7 @@
   }
   
   /* Style the submit button */
-  input[type=button] {
+  input[type=submit] {
     background-color: #04AA6D;
     color: white;
     padding: 12px 20px;
@@ -60,4 +60,17 @@
       width: 100%;
       margin-top: 10px;
     }
-  } 
+  }
+  
+  .linkButton{
+        background: none!important;
+        border: none;
+        padding: 0!important;
+        /*optional*/
+        font-family: arial, sans-serif;
+        /*input has OS specific font-family*/
+        color: #069;
+        text-decoration: underline;
+        cursor: pointer;
+        margin-top: 20px;
+  }
