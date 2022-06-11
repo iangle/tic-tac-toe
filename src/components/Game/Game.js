@@ -5,34 +5,34 @@ import './gameStyles.css'
 
 export default function Game() {
 
+  //const [squares, setSquares] = useState([]);
+  const gameId = JSON.parse(localStorage.getItem('gameId'));
+  const user1 = JSON.parse(localStorage.getItem('username'));
   const [squares, setSquares] = useState([]);
-  const [gameId, setGameId] = useState( JSON.parse(localStorage.getItem('gameId')) || '');
-  const [user1, setUser1] = useState('dude');
-  //const [user2, setUser2] = useState('');
-  //const [lastMoveBy, setLastMoveBy] = useState('');
+  const accessToken = JSON.parse(localStorage.getItem('accessToken'));
 
   const handleClick = (i) => {
       putMove(i, user1, gameId);
   }
 
-  const createGame = async(user1, user2, lastMoveBy) => {
-    var body = await fetch('https://7w5za22zsb.execute-api.us-east-1.amazonaws.com/prod/creategame', {
-      headers: {'content-type': 'application/json'},
-      method: 'POST',
-      body: JSON.stringify({user1, user2, lastMoveBy})
-    }).then(response => {return response})
-    .catch(error => {console.log("error: " + error)})
-
-    var response_body = await body.json();
-
-    setGameId(response_body['gameId']);
-
-    localStorage.setItem('gameId', JSON.stringify(response_body['gameId']));
+  const refreshPage = () => {
+    window.location.reload(false);
   }
 
-  const getGame = async(gameId) => {
+  const putMove = async(playerAction, currentPlayer, gameId) => {
+    await fetch('https://7w5za22zsb.execute-api.us-east-1.amazonaws.com/prod/' + gameId + '/performmove', {
+      headers: {'content-type': 'application/json', 'Authorization': accessToken},
+      method: 'PUT',
+      body: JSON.stringify({playerAction, currentPlayer})
+    }).then(response => {console.log(response); return response})
+    .catch(error => {console.log("error: " + error)})
+
+    getGame(gameId);
+  }
+
+  const getGame = async(gameId, accessToken) => {
     var body = await fetch('https://7w5za22zsb.execute-api.us-east-1.amazonaws.com/prod/' + gameId + '/fetchgame', {
-      headers: {'content-type': 'application/json'},
+      headers: {'content-type': 'application/json', 'Authorization': accessToken},
     }).then(response => {
       return response
     }).catch(error => {
@@ -43,32 +43,21 @@ export default function Game() {
 
     setSquares(response_body['Item'][0]['board']);
 
-    setGameId(response_body['Item'][0]['gameId']);
-
     console.log(response_body);
 
-  }
-
-  const putMove = async(playerAction, currentPlayer, gameId) => {
-    await fetch('https://7w5za22zsb.execute-api.us-east-1.amazonaws.com/prod/' + gameId + '/performmove', {
-      headers: {'content-type': 'application/json'},
-      method: 'PUT',
-      body: JSON.stringify({playerAction, currentPlayer})
-    }).then(response => {console.log(response); return response})
-    .catch(error => {console.log("error: " + error)})
   }
 
 
   const status = 'next player is X'
   const moves = (
     <li>
-      <button onClick={() => {createGame('dude', 'dude2', 'dude2')}}>Start the game</button>
+      <button onClick={() => refreshPage()}>Refresh</button>
     </li>
   );
 
   useEffect(() => {
-    getGame(gameId); 
-  }, [gameId]);
+    getGame(gameId, accessToken); 
+  }, [gameId, accessToken]);
 
 
   return (

@@ -1,8 +1,11 @@
 import {Routes, Route, useNavigate} from 'react-router-dom';
 import ConfirmationCode from './components/ConfirmationCode/ConfirmationCode';
+import CreateGame from './components/CreateGame/CreateGame';
+import JoinGame from './components/JoinGame/JoinGame';
 import Game from './components/Game/Game';
 import SignIn from './components/Login/Signin';
 import SignUp from './components/Register/Signup';
+import UserChoice from './components/UserChoice/UserChoice';
 
 function App() {
 
@@ -14,6 +17,10 @@ function App() {
 
   const goToConfirmationPage = () => {
     navigate('/confirm');
+}
+
+const goToUserChoicePage = () => {
+  navigate('/userchoice');
 }
 
   const registerUser = async(username, password, email, phoneNumber) => {
@@ -58,6 +65,7 @@ function App() {
       }else{
         console.log("successfully retrieved payload");
         alert('Please check your phone for a confirmation code');
+        localStorage.setItem("username", JSON.stringify(username));
         goToConfirmationPage();
       }
 
@@ -66,14 +74,20 @@ function App() {
 
     const body = await response.json();
 
+    const session = body["session"];
+    const challengeName = body["challenge"];
+
+    localStorage.setItem("session", JSON.stringify(session));
+    localStorage.setItem("challengeName", JSON.stringify(challengeName));
+
     console.log(body);
   }
   
-  const confirmCode = async(username, confirmationCode) => {
-    const response = await fetch('https://8yhohsoyql.execute-api.us-east-1.amazonaws.com/prod/signin', {
+  const confirmCode = async(username, confirmationCode, session, challengeName) => {
+    const response = await fetch('https://8yhohsoyql.execute-api.us-east-1.amazonaws.com/prod/confirm-phone-number', {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
-      body: JSON.stringify({username, confirmationCode})
+      body: JSON.stringify({username, confirmationCode, session, challengeName})
     }).then(response => {
 
       console.log(response);
@@ -84,7 +98,7 @@ function App() {
       }else{
         console.log("successfully retrieved payload");
         alert('Thank you for confirming!');
-        goToGamePage();
+        goToUserChoicePage();
       }
 
       return response;
@@ -93,10 +107,12 @@ function App() {
     const body = await response.json();
 
     console.log(body);
+
+    localStorage.setItem("accessToken", JSON.stringify(body['message']['AuthenticationResult']['AccessToken']));
   }
 
   const resendCode = async(username) => {
-    const response = await fetch('https://8yhohsoyql.execute-api.us-east-1.amazonaws.com/prod/signin', {
+    const response = await fetch('https://8yhohsoyql.execute-api.us-east-1.amazonaws.com/prod/resend-confirmation-code', {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
       body: JSON.stringify({username})
@@ -120,12 +136,43 @@ function App() {
     console.log(body);
   }
 
+  const create_game = async(user1, user2, lastMoveBy, accessToken) => {
+    var body = await fetch('https://7w5za22zsb.execute-api.us-east-1.amazonaws.com/prod/creategame', {
+      headers: {'Content-Type': 'application/json', 'Authorization': accessToken},
+      method: 'POST',
+      body: JSON.stringify({user1, user2, lastMoveBy})
+    }).then(response => {
+
+      console.log(response);
+
+      if(response.status !== 200){
+        console.log("an error occured")
+        alert('sorry, an error occured when trying to create the game, please try again')
+      }else{
+        console.log("successfully retrieved payload");
+        alert('successfully create game');
+      }
+
+      return response;
+    }).catch(error => {console.log('error: ' + error)})
+
+    var response_body = await body.json();
+
+    localStorage.setItem('gameId', JSON.stringify(response_body['gameId']));
+    localStorage.setItem('opponentUsername', JSON.stringify(user2));
+
+    goToGamePage();
+  }
+
   return (
     <Routes>
       <Route path="/signup" element={ <SignUp registerUser={registerUser} /> } />
       <Route path="/game" element={ <Game /> } />
       <Route path="/" element={ <SignIn signIn = {signIn}/> } />
       <Route path="/confirm" element={ <ConfirmationCode confirmCode={confirmCode} resendCode={resendCode} /> } />
+      <Route path="/userchoice" element={ <UserChoice /> } />
+      <Route path="creategame" element={ <CreateGame create_game={create_game} /> } />
+      <Route path="joingame" element={ <JoinGame /> } />
     </Routes>
   );
 }

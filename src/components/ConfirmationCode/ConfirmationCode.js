@@ -6,6 +6,14 @@ export default function ConfirmationCode({confirmCode, resendCode}) {
     
     const [confirmationCode, setConfirmationCode] = useState("");
 
+    const tempUsername = localStorage.getItem("username");
+    const username = JSON.parse(tempUsername);
+
+    const tempSession = localStorage.getItem("session");
+    const session = JSON.parse(tempSession);
+
+    const tempChallengeName = localStorage.getItem("challengeName");
+    const challengeName = JSON.parse(tempChallengeName);
 
     return (
         <div className="container">
@@ -19,9 +27,9 @@ export default function ConfirmationCode({confirmCode, resendCode}) {
                     </div>
                 </div>
                 <div className="row">
-                    <input type="button" onClick={() => confirmCode(confirmationCode)} value="Submit" />
+                    <input type="button" onClick={() => confirmCode(username, confirmationCode, session, challengeName)} value="Submit" />
                 </div>
-            <button onClick={() => {resendCode()}} type="button" className='linkButton' > Resend Confirmation Code </button>
+            <button onClick={() => {resendCode(username)}} type="button" className='linkButton' > Resend Confirmation Code </button>
         </form>
     </div> 
     )
