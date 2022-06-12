@@ -5,7 +5,8 @@ import './CreateGame.css';
 export default function CreateGame({create_game}){
 
     const [opponentsUsername, setOpponentsUsername] = useState('');
-    const current_user = JSON.parse(localStorage.getItem('username')) || '';
+    const current_user = JSON.parse(localStorage.getItem('username'));
+    const idToken = JSON.parse(localStorage.getItem('idToken'));
 
     return (
         <div className="container">
@@ -19,7 +20,7 @@ export default function CreateGame({create_game}){
                     </div>
                 </div>
                 <div className="row">
-                    <input type="button" onClick={() => create_game(current_user, opponentsUsername, opponentsUsername)} value="Submit" />
+                    <input type="button" onClick={() => create_game(current_user, opponentsUsername, opponentsUsername, idToken)} value="Submit" />
                 </div>
             </form>
         </div> 

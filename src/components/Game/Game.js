@@ -5,34 +5,33 @@ import './gameStyles.css'
 
 export default function Game() {
 
-  //const [squares, setSquares] = useState([]);
   const gameId = JSON.parse(localStorage.getItem('gameId'));
   const user1 = JSON.parse(localStorage.getItem('username'));
   const [squares, setSquares] = useState([]);
-  const accessToken = JSON.parse(localStorage.getItem('accessToken'));
+  const idToken = JSON.parse(localStorage.getItem('idToken'));
 
   const handleClick = (i) => {
-      putMove(i, user1, gameId);
+      putMove(i, user1, gameId, idToken);
   }
 
   const refreshPage = () => {
     window.location.reload(false);
   }
 
-  const putMove = async(playerAction, currentPlayer, gameId) => {
+  const putMove = async(playerAction, currentPlayer, gameId, idToken) => {
     await fetch('https://7w5za22zsb.execute-api.us-east-1.amazonaws.com/prod/' + gameId + '/performmove', {
-      headers: {'content-type': 'application/json', 'Authorization': accessToken},
+      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken},
       method: 'PUT',
       body: JSON.stringify({playerAction, currentPlayer})
     }).then(response => {console.log(response); return response})
     .catch(error => {console.log("error: " + error)})
 
-    getGame(gameId);
+    getGame(gameId, idToken);
   }
 
-  const getGame = async(gameId, accessToken) => {
+  const getGame = async(gameId, idToken) => {
     var body = await fetch('https://7w5za22zsb.execute-api.us-east-1.amazonaws.com/prod/' + gameId + '/fetchgame', {
-      headers: {'content-type': 'application/json', 'Authorization': accessToken},
+      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken},
     }).then(response => {
       return response
     }).catch(error => {
@@ -48,7 +47,6 @@ export default function Game() {
   }
 
 
-  const status = 'next player is X'
   const moves = (
     <li>
       <button onClick={() => refreshPage()}>Refresh</button>
@@ -56,8 +54,8 @@ export default function Game() {
   );
 
   useEffect(() => {
-    getGame(gameId, accessToken); 
-  }, [gameId, accessToken]);
+    getGame(gameId, idToken); 
+  }, [gameId, idToken]);
 
 
   return (
@@ -66,7 +64,6 @@ export default function Game() {
         <Board onClick={handleClick} squares={squares}></Board>
       </div>
       <div className='game-info'>
-        <div>{status}</div>
         <div>{moves}</div>
       </div>
     </div>

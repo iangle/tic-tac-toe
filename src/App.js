@@ -106,11 +106,12 @@ const goToUserChoicePage = () => {
 
     const body = await response.json();
 
-    console.log(body);
+    console.log(body['message']['AuthenticationResult']['IdToken']);
 
-    localStorage.setItem("accessToken", JSON.stringify(body['message']['AuthenticationResult']['AccessToken']));
+    localStorage.setItem("idToken", JSON.stringify(body['message']['AuthenticationResult']['IdToken']));
   }
 
+  // ********** needs to be fixed!!!! ****************
   const resendCode = async(username) => {
     const response = await fetch('https://8yhohsoyql.execute-api.us-east-1.amazonaws.com/prod/resend-confirmation-code', {
       headers: {'Content-Type': 'application/json'},
@@ -136,9 +137,9 @@ const goToUserChoicePage = () => {
     console.log(body);
   }
 
-  const create_game = async(user1, user2, lastMoveBy, accessToken) => {
+  const create_game = async(user1, user2, lastMoveBy, idToken) => {
     var body = await fetch('https://7w5za22zsb.execute-api.us-east-1.amazonaws.com/prod/creategame', {
-      headers: {'Content-Type': 'application/json', 'Authorization': accessToken},
+      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken},
       method: 'POST',
       body: JSON.stringify({user1, user2, lastMoveBy})
     }).then(response => {
