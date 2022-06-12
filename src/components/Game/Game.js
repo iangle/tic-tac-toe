@@ -46,8 +46,8 @@ export default function Game() {
 
   }
 
-
-  const moves = (
+  //the button that refreshes the board
+  const refresh = (
     <li>
       <button onClick={() => refreshPage()}>Refresh</button>
     </li>
@@ -64,7 +64,7 @@ export default function Game() {
         <Board onClick={handleClick} squares={squares}></Board>
       </div>
       <div className='game-info'>
-        <div>{moves}</div>
+        <div>{refresh}</div>
       </div>
     </div>
   )
