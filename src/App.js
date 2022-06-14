@@ -111,30 +111,9 @@ const goToUserChoicePage = () => {
     localStorage.setItem("idToken", JSON.stringify(body['message']['AuthenticationResult']['IdToken']));
   }
 
-  // ********** needs to be fixed!!!! ****************
-  const resendCode = async(username) => {
-    const response = await fetch('https://8yhohsoyql.execute-api.us-east-1.amazonaws.com/prod/resend-confirmation-code', {
-      headers: {'Content-Type': 'application/json'},
-      method: 'POST',
-      body: JSON.stringify({username})
-    }).then(response => {
 
-      console.log(response);
-
-      if(response.status !== 200){
-        console.log("an error occured")
-        alert('sorry, an error occured when trying to sign you in, please try again')
-      }else{
-        console.log("successfully retrieved payload");
-        alert('resent confirmation code');
-      }
-
-      return response;
-    }).catch(error => {console.log('error: ' + error)})
-
-    const body = await response.json();
-
-    console.log(body);
+  const resendCode = () => {
+    navigate('/signin');
   }
 
   const create_game = async(user1, user2, lastMoveBy, idToken) => {

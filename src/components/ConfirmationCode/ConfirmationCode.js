@@ -26,7 +26,7 @@ export default function ConfirmationCode({confirmCode, resendCode}) {
                 <div className="row">
                     <input type="button" onClick={() => confirmCode(username, confirmationCode, session, challengeName)} value="Submit" />
                 </div>
-            <button onClick={() => {resendCode(username)}} type="button" className='linkButton' > Resend Confirmation Code </button>
+            <button onClick={() => {resendCode()}} type="button" className='linkButton' > Resend Confirmation Code </button>
         </form>
     </div> 
     )
