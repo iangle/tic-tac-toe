@@ -94,7 +94,7 @@ const goToUserChoicePage = () => {
 
       if(response.status !== 200){
         console.log("an error occured")
-        alert('sorry, an error occured when trying to sign you in, please try again')
+        alert('sorry, an error occured when trying to confirm the code please try again')
       }else{
         console.log("successfully retrieved payload");
         alert('Thank you for confirming!');
