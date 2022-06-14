@@ -6,14 +6,11 @@ export default function ConfirmationCode({confirmCode, resendCode}) {
     
     const [confirmationCode, setConfirmationCode] = useState("");
 
-    const tempUsername = localStorage.getItem("username");
-    const username = JSON.parse(tempUsername);
+    const username = JSON.parse(localStorage.getItem("username"));
 
-    const tempSession = localStorage.getItem("session");
-    const session = JSON.parse(tempSession);
+    const session = JSON.parse(localStorage.getItem("session"));
 
-    const tempChallengeName = localStorage.getItem("challengeName");
-    const challengeName = JSON.parse(tempChallengeName);
+    const challengeName = JSON.parse(localStorage.getItem("challengeName"));
 
     return (
         <div className="container">
